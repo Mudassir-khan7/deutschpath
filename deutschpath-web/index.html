@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeutschPath — A1 & A2 German Learning Tracker</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body data-theme="dark" data-accent="emerald">
+  <div class="app-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-badge">🇩🇪</div>
+        <div class="brand-text">
+          <h1>DeutschPath</h1>
+          <span class="subtext">A1 → A2 German Tracker</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <button class="nav-item active" data-tab="dashboard">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Dashboard</span>
+        </button>
+        <button class="nav-item" data-tab="daily-tasks">
+          <span class="nav-icon">✅</span>
+          <span class="nav-label">Daily Tasks</span>
+        </button>
+        <button class="nav-item" data-tab="roadmap">
+          <span class="nav-icon">🗺️</span>
+          <span class="nav-label">16-Week Roadmap</span>
+        </button>
+        <button class="nav-item" data-tab="study-calendar">
+          <span class="nav-icon">📅</span>
+          <span class="nav-label">Study Calendar</span>
+        </button>
+        <button class="nav-item" data-tab="notes">
+          <span class="nav-icon">📝</span>
+          <span class="nav-label">Topic Notes</span>
+        </button>
+        <button class="nav-item" data-tab="journal">
+          <span class="nav-icon">📖</span>
+          <span class="nav-label">Daily Journal</span>
+        </button>
+        <button class="nav-item" data-tab="vocabulary">
+          <span class="nav-icon">📇</span>
+          <span class="nav-label">Vocabulary Bank</span>
+        </button>
+        <button class="nav-item" data-tab="translator">
+          <span class="nav-icon">🔄</span>
+          <span class="nav-label">Dictionary & Tools</span>
+        </button>
+        <button class="nav-item" data-tab="pronunciation">
+          <span class="nav-icon">🔊</span>
+          <span class="nav-label">Pronunciation</span>
+        </button>
+        <button class="nav-item" data-tab="weekly-report">
+          <span class="nav-icon">📈</span>
+          <span class="nav-label">Weekly Report</span>
+        </button>
+        <button class="nav-item" data-tab="settings">
+          <span class="nav-icon">⚙️</span>
+          <span class="nav-label">Settings</span>
+        </button>
+        <button class="nav-item" data-tab="backup">
+          <span class="nav-icon">💾</span>
+          <span class="nav-label">Backup & Export</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="phase-indicator">
+          <span class="phase-pill a1-active" id="activePhasePill">Phase 1: A1</span>
+          <span class="lock-status" id="a2LockStatusIcon">🔒 A2 Locked</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="main-content">
+      <!-- TOP HEADER -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-toggle" id="mobileMenuBtn" aria-label="Toggle menu">☰</button>
+          <div class="today-display">
+            <span class="today-label">TODAY'S DATE</span>
+            <span class="today-val" id="headerDateDisplay">Thursday, October 15, 2026</span>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="stat-chip streak-chip">
+            <span class="chip-icon">🔥</span>
+            <div>
+              <span class="chip-value" id="headerStreakVal">0</span>
+              <span class="chip-label">day streak</span>
+            </div>
+          </div>
+          <div class="stat-chip goal-chip">
+            <span class="chip-icon">⏱️</span>
+            <div>
+              <span class="chip-value" id="headerTimeSpent">0 / 90</span>
+              <span class="chip-label">mins today</span>
+            </div>
+          </div>
+          <button class="quick-speak-btn" id="headerQuickSpeak" title="Test German Speech Synthesizer">
+            🔊 Test Voice
+          </button>
+        </div>
+      </header>
+
+      <!-- TAB SECTIONS CONTAINER -->
+      <div class="content-body">
+        
+        <!-- 1. DASHBOARD -->
+        <section class="tab-pane active" id="tab-dashboard">
+          <div class="page-title-row">
+            <div>
+              <h2>Lern-Dashboard</h2>
+              <p class="subtitle">Willkommen zurück! Keep your streak strong and complete your daily German ritual.</p>
+            </div>
+            <div class="a2-unlock-banner" id="a2BannerPrompt">
+              <span class="banner-badge">A2 Status</span>
+              <span id="a2BannerText">Complete all 56 days of A1 to unlock Phase 2.</span>
+              <button class="btn-sm btn-outline" id="checkA1StatusBtn">Check A1 Progress</button>
+            </div>
+          </div>
+
+          <!-- KPI STAT CARDS -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-title">Today's Study Time</span>
+                <span class="kpi-icon">⏳</span>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-val" id="dashTodayTime">0</span>
+                <span class="kpi-unit">/ <span id="dashGoalTime">90</span> min</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="dashTimeProgress" style="width: 0%"></div>
+              </div>
+              <span class="kpi-footer" id="dashTimeRemaining">90 mins remaining today</span>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-title">Daily Habit Score</span>
+                <span class="kpi-icon">🎯</span>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-val" id="dashTaskPercent">0%</span>
+                <span class="kpi-unit">completed</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="dashTaskProgress" style="width: 0%"></div>
+              </div>
+              <span class="kpi-footer" id="dashTasksCompletedCount">0 of 4 routine activities done</span>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-title">Current Study Streak</span>
+                <span class="kpi-icon">🔥</span>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-val" id="dashStreakCount">0</span>
+                <span class="kpi-unit">days</span>
+              </div>
+              <div class="streak-dots" id="dashStreakDots">
+                <!-- Last 7 days status indicators -->
+              </div>
+              <span class="kpi-footer">Consistency builds fluency!</span>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-title">112-Day Overall Progress</span>
+                <span class="kpi-icon">🇩🇪</span>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-val" id="dashOverallPercent">0%</span>
+                <span class="kpi-unit">(<span id="dashCompletedDaysCount">0</span>/112 days)</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill accent-fill" id="dashOverallProgress" style="width: 0%"></div>
+              </div>
+              <span class="kpi-footer" id="dashPhaseSplit">A1: 0/56 | A2: Locked</span>
+            </div>
+          </div>
+
+          <!-- DASHBOARD SPLIT VIEW -->
+          <div class="dashboard-split">
+            <!-- CURRENT LESSON CARD -->
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <h3>📍 Current Roadmap Focus</h3>
+                <span class="badge" id="dashCurrentDayBadge">Day 1</span>
+              </div>
+              <div class="current-lesson-box" id="dashCurrentLessonBox">
+                <h4 id="dashLessonTitle">German alphabet, pronunciation rules (w, v, z, j, ei, ie, ä/ö/ü/ß)</h4>
+                <p id="dashLessonGoal">Goal: Alphabet, pronunciation, greetings, “to be,” basic pronouns</p>
+                <div class="lesson-meta">
+                  <span class="meta-tag" id="dashLessonPhase">Phase 1: A1</span>
+                  <span class="meta-tag" id="dashLessonWeek">Week 1 — Foundations</span>
+                </div>
+                <div class="action-row">
+                  <button class="btn-primary" id="dashMarkLessonBtn">Mark Lesson Done</button>
+                  <button class="btn-secondary" id="dashOpenLessonNotesBtn">Open Topic Notes</button>
+                  <button class="btn-outline" id="dashGoToRoadmapBtn">View on Roadmap</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- TODAY'S ROUTINE PREVIEW -->
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <h3>⚡ Today's Quick Ritual</h3>
+                <span class="text-muted" id="dashRoutineSub">Track minutes as you go</span>
+              </div>
+              <div class="quick-routine-list" id="dashQuickRoutineList">
+                <!-- Rendered dynamically -->
+              </div>
+              <button class="btn-primary full-width" id="dashGoToTasksBtn">Go to Daily Task Hub</button>
+            </div>
+          </div>
+
+          <!-- NON-NEGOTIABLES & URDU LEARNER TIPS -->
+          <div class="dash-card info-card">
+            <div class="dash-card-header">
+              <h3>💡 Non-Negotiable Rules from Your Plan</h3>
+              <span class="badge badge-accent">Daily Reminder</span>
+            </div>
+            <div class="rules-grid">
+              <div class="rule-box">
+                <div class="rule-num">1</div>
+                <div>
+                  <strong>Anki Every Single Day</strong>
+                  <p>Even 10 minutes. Spaced repetition is what makes vocabulary stick permanently.</p>
+                </div>
+              </div>
+              <div class="rule-box">
+                <div class="rule-num">2</div>
+                <div>
+                  <strong>Always Learn Nouns With Gender</strong>
+                  <p>Always learn <em>der/die/das</em> with every word. Never memorize a bare noun alone.</p>
+                </div>
+              </div>
+              <div class="rule-box">
+                <div class="rule-num">3</div>
+                <div>
+                  <strong>Speak Out Loud Daily</strong>
+                  <p>Silent learning doesn't build real fluency. Talk out loud even when studying by yourself.</p>
+                </div>
+              </div>
+              <div class="rule-box">
+                <div class="rule-num">4</div>
+                <div>
+                  <strong>Sundays are for Review</strong>
+                  <p>Don't skip review days. Consolidation converts short-term knowledge into long-term recall.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. DAILY TASKS -->
+        <section class="tab-pane" id="tab-daily-tasks">
+          <div class="page-title-row">
+            <div>
+              <h2>Tägliche Aufgaben (Daily Tasks)</h2>
+              <p class="subtitle">Log your study activities and check off daily time commitments for today.</p>
+            </div>
+            <div class="date-picker-row">
+              <label for="taskDateSelector">Viewing Date:</label>
+              <input type="date" id="taskDateSelector" class="form-control-sm">
+              <button class="btn-sm btn-outline" id="taskTodayBtn">Today</button>
+            </div>
+          </div>
+
+          <div class="task-page-grid">
+            <!-- TASK CHECKLIST -->
+            <div class="task-card-main">
+              <div class="task-header-summary">
+                <div>
+                  <h3>Routine Checklist</h3>
+                  <span class="text-muted" id="taskDayTitle">Routine for today</span>
+                </div>
+                <div class="ring-stat">
+                  <span class="ring-number" id="tasksScoreDisplay">0%</span>
+                  <span class="ring-label">Progress</span>
+                </div>
+              </div>
+
+              <div class="routine-items" id="routineItemsContainer">
+                <!-- Daily items injected via JS -->
+              </div>
+
+              <!-- LOG CUSTOM ACTIVITY -->
+              <div class="add-custom-time-box">
+                <h4>➕ Log Additional Study Minutes</h4>
+                <div class="inline-input-group">
+                  <input type="text" id="customActivityName" placeholder="e.g. YouTube Urdu German course / Tandem chat" class="form-control">
+                  <input type="number" id="customActivityMins" placeholder="Minutes" min="5" max="300" class="form-control-sm" style="width: 100px;">
+                  <button class="btn-primary" id="addCustomMinutesBtn">Add Time</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- DAILY SUMMARY & NOTES -->
+            <div class="task-sidebar">
+              <div class="mini-card">
+                <h4>Daily Summary</h4>
+                <ul class="stat-bullet-list">
+                  <li>Total Logged: <strong id="taskTotalLoggedDisplay">0 mins</strong></li>
+                  <li>Daily Target: <strong id="taskGoalDisplay">90 mins</strong></li>
+                  <li>Goal Status: <span class="badge" id="taskGoalStatusBadge">In Progress</span></li>
+                  <li>Active Phase: <strong id="taskPhaseLabel">Phase 1 (A1)</strong></li>
+                </ul>
+              </div>
+
+              <div class="mini-card">
+                <h4>Recommended Time Split</h4>
+                <div class="split-table-wrapper">
+                  <table class="table-compact">
+                    <thead>
+                      <tr><th>Activity</th><th>A1 Plan</th><th>A2 Plan</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>Grammar & Vocab</td><td>20–30 min</td><td>20–30 min</td></tr>
+                      <tr><td>Duolingo</td><td>15–20 min</td><td>15–20 min</td></tr>
+                      <tr><td>Anki Cards</td><td>15–20 min</td><td>15–20 min</td></tr>
+                      <tr><td>Listening Practice</td><td>10–20 min</td><td>15–20 min</td></tr>
+                      <tr class="highlight-row"><td><strong>Sunday</strong></td><td colspan="2">Light review only</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="mini-card">
+                <h4>Quick Links from Plan</h4>
+                <div class="links-stack">
+                  <a href="https://learngerman.dw.com/en/overview" target="_blank" rel="noopener" class="source-link">
+                    <span>🌐 DW Nicos Weg (Free Course)</span> ↗
+                  </a>
+                  <a href="https://www.duolingo.com" target="_blank" rel="noopener" class="source-link">
+                    <span>🦉 Duolingo Web</span> ↗
+                  </a>
+                  <a href="https://apps.ankiweb.net" target="_blank" rel="noopener" class="source-link">
+                    <span>⚡ AnkiWeb Flashcards</span> ↗
+                  </a>
+                  <a href="https://www.youtube.com/@EasyGerman" target="_blank" rel="noopener" class="source-link">
+                    <span>🎧 Easy German YouTube</span> ↗
+                  </a>
+                  <a href="https://www.goethe.de/en/spr/kup/prf.html" target="_blank" rel="noopener" class="source-link">
+                    <span>🏛️ Goethe-Institut Mock Tests</span> ↗
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. ROADMAP (16 WEEKS, DAYS 1–112) -->
+        <section class="tab-pane" id="tab-roadmap">
+          <div class="page-title-row">
+            <div>
+              <h2>16-Wochen Lernplan (A1 & A2 Roadmap)</h2>
+              <p class="subtitle">Complete chronological syllabus directly from your uploaded A1 & A2 PDFs.</p>
+            </div>
+            <div class="roadmap-filter-tabs">
+              <button class="phase-btn active" id="btnFilterAll">All (16 Weeks)</button>
+              <button class="phase-btn" id="btnFilterA1">A1 (Days 1–56)</button>
+              <button class="phase-btn" id="btnFilterA2">A2 (Days 57–112)</button>
+            </div>
+          </div>
+
+          <!-- A2 LOCK CONTROLLER MODAL / PROMPT -->
+          <div class="phase-card-callout" id="a2LockStatusCallout">
+            <div class="lock-callout-icon">🔒</div>
+            <div class="lock-callout-content">
+              <h3>Phase 2 (A2 German: Weeks 9–16, Days 57–112) Lock Policy</h3>
+              <p>Per your plan's strict rules, <strong>A2 remains locked</strong> until you complete all 56 days of A1 and explicitly confirm completion. Currently, you have completed <strong id="a1ChecklistCount">0 / 56</strong> A1 days.</p>
+              <div class="lock-action-row">
+                <button class="btn-sm btn-primary" id="confirmUnlockA2Btn" disabled>Confirm A1 Completion & Unlock A2</button>
+                <button class="btn-sm btn-outline" id="previewA2CurriculumBtn">Toggle View Mode (View Only)</button>
+                <span class="text-muted" id="unlockRequirementNote">Complete 56/56 days to enable unlock</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- WEEKS ACCORDION LIST -->
+          <div class="weeks-list" id="weeksAccordionContainer">
+            <!-- Generated dynamically via roadmap-data.js -->
+          </div>
+        </section>
+
+        <!-- 4. STUDY CALENDAR -->
+        <section class="tab-pane" id="tab-study-calendar">
+          <div class="page-title-row">
+            <div>
+              <h2>Studienkalender (Study Calendar)</h2>
+              <p class="subtitle">View your daily study consistency, completed goals, and missed days at a glance.</p>
+            </div>
+            <div class="calendar-controls">
+              <button class="btn-sm btn-outline" id="calPrevMonthBtn">&lt; Prev</button>
+              <span class="calendar-month-label" id="calMonthYearLabel">October 2026</span>
+              <button class="btn-sm btn-outline" id="calNextMonthBtn">Next &gt;</button>
+              <button class="btn-sm btn-primary" id="calTodayBtn">Today</button>
+            </div>
+          </div>
+
+          <div class="calendar-grid-card">
+            <div class="calendar-legend">
+              <div class="legend-item"><span class="legend-dot dot-full"></span> Completed Goal (90+ min or all tasks)</div>
+              <div class="legend-item"><span class="legend-dot dot-partial"></span> Partial Study</div>
+              <div class="legend-item"><span class="legend-dot dot-missed"></span> Missed / 0 min</div>
+              <div class="legend-item"><span class="legend-dot dot-future"></span> Upcoming</div>
+            </div>
+
+            <div class="calendar-table">
+              <div class="calendar-header-days">
+                <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span class="sun-col">Sun</span>
+              </div>
+              <div class="calendar-days-grid" id="calendarDaysGrid">
+                <!-- Injected via calendar JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- SELECTED DAY DETAILS MODAL / CARD -->
+          <div class="dash-card" id="calSelectedDayCard">
+            <div class="dash-card-header">
+              <h3 id="calDetailDate">Select a day to view logged study history</h3>
+              <span class="badge" id="calDetailStatusBadge">Status</span>
+            </div>
+            <div id="calDetailBody" class="cal-detail-body">
+              <p class="text-muted">Click any date above to review its recorded time, checked tasks, and journal entry.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. TOPIC NOTES -->
+        <section class="tab-pane" id="tab-notes">
+          <div class="page-title-row">
+            <div>
+              <h2>Themen-Notizen (Topic Notes)</h2>
+              <p class="subtitle">Write, search, and store study notes for any of the 112 German syllabus topics.</p>
+            </div>
+            <div class="search-filter-box">
+              <input type="text" id="notesSearchInput" placeholder="Search notes or lessons..." class="form-control-sm">
+            </div>
+          </div>
+
+          <div class="notes-layout">
+            <!-- TOPIC SELECTOR SIDEBAR -->
+            <div class="notes-sidebar">
+              <div class="notes-sidebar-header">
+                <label for="notesPhaseSelect">Phase:</label>
+                <select id="notesPhaseSelect" class="form-control-sm">
+                  <option value="A1">Phase 1: A1 (Days 1–56)</option>
+                  <option value="A2">Phase 2: A2 (Days 57–112)</option>
+                </select>
+              </div>
+              <div class="notes-topic-list" id="notesTopicList">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+
+            <!-- NOTES EDITOR -->
+            <div class="notes-editor-pane">
+              <div class="editor-header">
+                <div>
+                  <h3 id="activeNoteDayTitle">Select a topic from the left</h3>
+                  <span class="text-muted" id="activeNoteSubtitle">Syllabus topic will appear here</span>
+                </div>
+                <button class="btn-primary" id="saveNoteBtn">Save Note 💾</button>
+              </div>
+              <textarea id="activeNoteTextarea" class="notes-textarea" placeholder="Write your notes here... (e.g. grammar rules, examples, conjugation tables, Urdu translation hints)"></textarea>
+              <div class="editor-footer">
+                <span class="text-muted" id="noteSaveStatus">All changes saved locally.</span>
+                <button class="btn-outline btn-sm" id="clearNoteBtn">Clear</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 6. DAILY JOURNAL -->
+        <section class="tab-pane" id="tab-journal">
+          <div class="page-title-row">
+            <div>
+              <h2>Tagebuch (Daily German Journal)</h2>
+              <p class="subtitle">Practice writing in German every day. Track your thoughts, struggles, and reflections.</p>
+            </div>
+            <div class="journal-date-controls">
+              <input type="date" id="journalDatePicker" class="form-control-sm">
+              <button class="btn-sm btn-outline" id="journalTodayBtn">Today's Entry</button>
+            </div>
+          </div>
+
+          <div class="journal-grid">
+            <div class="journal-editor-card">
+              <div class="dash-card-header">
+                <div>
+                  <h3 id="journalEntryTitle">Journal Entry for Today</h3>
+                  <span class="text-muted" id="journalWordCount">0 words written</span>
+                </div>
+                <div class="action-buttons">
+                  <button class="btn-primary btn-sm" id="saveJournalBtn">Save Journal 💾</button>
+                </div>
+              </div>
+              <textarea id="journalTextarea" class="journal-textarea" placeholder="Heute habe ich Deutsch gelernt... (Write today's German practice sentences or study reflection here)"></textarea>
+              
+              <div class="journal-prompts">
+                <strong>💡 Daily Writing Prompts from your PDF Plan:</strong>
+                <p id="journalPromptSuggestion">"Week 1: Write 'Hallo, ich heiße [Name]. Ich komme aus Pakistan. Ich bin ... Jahre alt.'"</p>
+              </div>
+            </div>
+
+            <div class="journal-history-card">
+              <div class="dash-card-header">
+                <h3>Past Journal Entries</h3>
+                <span class="badge" id="journalTotalEntriesCount">0 entries</span>
+              </div>
+              <div class="journal-entries-list" id="journalHistoryList">
+                <!-- Past entries listed here -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 7. VOCABULARY BANK (German, English, Urdu) -->
+        <section class="tab-pane" id="tab-vocabulary">
+          <div class="page-title-row">
+            <div>
+              <h2>Wortschatz (Vocabulary Bank)</h2>
+              <p class="subtitle">Save words with their gender (der/die/das), English meaning, Urdu translation, and sample sentences.</p>
+            </div>
+            <button class="btn-primary" id="openAddWordModalBtn">+ Add New Word</button>
+          </div>
+
+          <!-- ADD WORD FORM / MODAL CARD -->
+          <div class="dash-card" id="addWordCard">
+            <div class="dash-card-header">
+              <h3 id="vocabFormHeading">Add a New Word to Your Dictionary</h3>
+              <span class="badge badge-accent">Offline Storage</span>
+            </div>
+            <form id="vocabForm" class="vocab-input-grid">
+              <div class="form-group">
+                <label>Article / Gender:</label>
+                <select id="vocabGender" class="form-control">
+                  <option value="der">der (Masculine / مَذکّر)</option>
+                  <option value="die">die (Feminine / مُؤنّث)</option>
+                  <option value="das">das (Neuter / بےجان)</option>
+                  <option value="die (pl)">die (Plural / جمع)</option>
+                  <option value="verb">Verb (فعل)</option>
+                  <option value="adj">Adjective / Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>German Word / Phrase:</label>
+                <input type="text" id="vocabGerman" placeholder="e.g. Apfel, aufstehen, Bahnhof" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label>English Meaning:</label>
+                <input type="text" id="vocabEnglish" placeholder="e.g. apple, to wake up, train station" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label>Urdu Meaning (اردو معنی):</label>
+                <input type="text" id="vocabUrdu" placeholder="مثال: سیب، جاگنا، ریلوے اسٹیشن" class="form-control urdu-text" dir="rtl">
+              </div>
+              <div class="form-group full-width">
+                <label>Example Sentence:</label>
+                <input type="text" id="vocabExample" placeholder="e.g. Ich esse einen Apfel. (Urdu: میں ایک سیب کھا رہا ہوں۔)" class="form-control">
+              </div>
+              <div class="form-group">
+                <label>Level / Category:</label>
+                <select id="vocabLevel" class="form-control">
+                  <option value="A1">A1 Level</option>
+                  <option value="A2">A2 Level</option>
+                  <option value="Core">Core / Routine</option>
+                </select>
+              </div>
+              <div class="form-group btn-align">
+                <button type="submit" class="btn-primary" id="saveVocabBtn">Save Word to Bank</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- VOCABULARY LIST & FILTER -->
+          <div class="dash-card">
+            <div class="vocab-filter-bar">
+              <input type="text" id="vocabFilterInput" placeholder="Search by German, English, or Urdu..." class="form-control">
+              <select id="vocabFilterGender" class="form-control-sm">
+                <option value="all">All Types</option>
+                <option value="der">der</option>
+                <option value="die">die</option>
+                <option value="das">das</option>
+                <option value="verb">Verbs</option>
+                <option value="adj">Adjectives</option>
+              </select>
+              <select id="vocabFilterLevel" class="form-control-sm">
+                <option value="all">All Levels</option>
+                <option value="A1">A1</option>
+                <option value="A2">A2</option>
+              </select>
+              <span class="vocab-count-badge" id="vocabCountBadge">0 words saved</span>
+            </div>
+
+            <div class="table-responsive">
+              <table class="vocab-table">
+                <thead>
+                  <tr>
+                    <th>Audio</th>
+                    <th>German</th>
+                    <th>English</th>
+                    <th class="urdu-col">اردو (Urdu)</th>
+                    <th>Example</th>
+                    <th>Level</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="vocabTableBody">
+                  <!-- Populated dynamically via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 8. TRANSLATOR & DICTIONARY -->
+        <section class="tab-pane" id="tab-translator">
+          <div class="page-title-row">
+            <div>
+              <h2>Wörterbuch & Übersetzer (Dictionary & Translation)</h2>
+              <p class="subtitle">Search your offline German-English-Urdu dictionary, or lookup words online.</p>
+            </div>
+            <span class="badge" id="onlineStatusBadge">Checking connection...</span>
+          </div>
+
+          <div class="translator-grid">
+            <!-- OFFLINE INSTANT DICTIONARY -->
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <h3>📖 Offline Personal Dictionary</h3>
+                <span class="badge badge-accent">Instant & Offline</span>
+              </div>
+              <p class="text-muted">Searches all words stored in your vocabulary bank without requiring an internet connection.</p>
+              
+              <div class="lookup-input-row">
+                <input type="text" id="dictSearchQuery" placeholder="Type German or English or Urdu word..." class="form-control">
+                <button class="btn-primary" id="dictSearchBtn">Search</button>
+              </div>
+
+              <div class="dict-results-container" id="dictResultsBox">
+                <p class="text-muted text-center" style="padding: 2rem 0;">Type a word above to search your personal dictionary.</p>
+              </div>
+            </div>
+
+            <!-- ONLINE TRANSLATOR HELPER -->
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <h3>🌐 External Online Translators & Quick Tools</h3>
+                <span class="badge">When Online</span>
+              </div>
+              <p class="text-muted">Quick 1-click tools for full sentence translation and grammar checking:</p>
+
+              <div class="tool-links-grid">
+                <div class="tool-card">
+                  <h4>DeepL Translator</h4>
+                  <p>World-class German translation with natural phrasing.</p>
+                  <a href="https://www.deepl.com/translator#de/en/" target="_blank" rel="noopener" class="btn-sm btn-outline">Open DeepL ↗</a>
+                </div>
+                <div class="tool-card">
+                  <h4>Leo German Dictionary</h4>
+                  <p>In-depth German noun genders, verb conjugations, and idioms.</p>
+                  <a href="https://dict.leo.org/german-english/" target="_blank" rel="noopener" class="btn-sm btn-outline">Open LEO ↗</a>
+                </div>
+                <div class="tool-card">
+                  <h4>Google Translate (German ↔ Urdu)</h4>
+                  <p>Translate directly between German and Urdu.</p>
+                  <a href="https://translate.google.com/?sl=de&tl=ur" target="_blank" rel="noopener" class="btn-sm btn-outline">Open Google Translate ↗</a>
+                </div>
+                <div class="tool-card">
+                  <h4>Verbformen Conjugation</h4>
+                  <p>Full tables for all German verb tenses (Präsens, Perfekt, Präteritum).</p>
+                  <a href="https://www.verbformen.com/" target="_blank" rel="noopener" class="btn-sm btn-outline">Open Verbformen ↗</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 9. PRONUNCIATION PRACTICE -->
+        <section class="tab-pane" id="tab-pronunciation">
+          <div class="page-title-row">
+            <div>
+              <h2>Aussprache-Übung (Pronunciation Practice)</h2>
+              <p class="subtitle">Listen to high-quality German speech synthesis directly in your browser. Practice speaking aloud!</p>
+            </div>
+            <div class="voice-selector-box">
+              <label for="germanVoiceSelect">Voice:</label>
+              <select id="germanVoiceSelect" class="form-control-sm"></select>
+            </div>
+          </div>
+
+          <div class="pronounce-grid">
+            <!-- INTERACTIVE PRONOUNCE BOX -->
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <h3>🗣️ Text-to-Speech Player</h3>
+                <span class="badge badge-accent">Web Speech API</span>
+              </div>
+
+              <div class="form-group">
+                <label>Enter any German word, sentence, or dialogue:</label>
+                <textarea id="pronounceTextInput" class="form-control" rows="4" placeholder="Guten Tag! Wie geht es Ihnen? Ich lerne Deutsch mit DeutschPath."></textarea>
+              </div>
+
+              <div class="audio-control-sliders">
+                <div class="slider-group">
+                  <label>Speed (Rate): <span id="rateVal">0.9x</span></label>
+                  <input type="range" id="speechRate" min="0.5" max="1.5" step="0.1" value="0.9">
+                </div>
+                <div class="slider-group">
+                  <label>Pitch: <span id="pitchVal">1.0</span></label>
+                  <input type="range" id="speechPitch" min="0.7" max="1.3" step="0.1" value="1.0">
+                </div>
+              </div>
+
+              <div class="action-row">
+                <button class="btn-primary" id="playPronounceBtn">🔊 Speak Aloud</button>
+                <button class="btn-outline" id="stopPronounceBtn">⏹️ Stop</button>
+              </div>
+            </div>
+
+            <!-- CURATED DRILLS FROM A1 & A2 ROADMAPS -->
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <h3>🎯 Roadmap Pronunciation Drills</h3>
+                <span class="badge">Click to Listen</span>
+              </div>
+              <div class="drills-scroll-list" id="pronounceDrillsList">
+                <!-- Injected via JS with audio buttons -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 10. WEEKLY REPORT -->
+        <section class="tab-pane" id="tab-weekly-report">
+          <div class="page-title-row">
+            <div>
+              <h2>Wochenbericht (Weekly Learning Report)</h2>
+              <p class="subtitle">Detailed breakdown of study hours, activity distribution, and roadmap progress.</p>
+            </div>
+            <div class="report-week-selector">
+              <label for="reportWeekSelect">Select Week:</label>
+              <select id="reportWeekSelect" class="form-control-sm">
+                <!-- 16 weeks populated via JS -->
+              </select>
+            </div>
+          </div>
+
+          <div class="report-grid">
+            <div class="report-stat-card">
+              <h4>Total Study Time This Week</h4>
+              <div class="report-big-val" id="reportTotalTime">0 min</div>
+              <span class="text-muted" id="reportVsGoal">Target: 630 mins (7 days × 90 min)</span>
+            </div>
+
+            <div class="report-stat-card">
+              <h4>Days Studied</h4>
+              <div class="report-big-val" id="reportDaysActive">0 / 7</div>
+              <span class="text-muted">Consistency rate</span>
+            </div>
+
+            <div class="report-stat-card">
+              <h4>Roadmap Lessons Mastered</h4>
+              <div class="report-big-val" id="reportLessonsDone">0 / 7</div>
+              <span class="text-muted">Weekly roadmap coverage</span>
+            </div>
+
+            <div class="report-stat-card">
+              <h4>Vocabulary Words Added</h4>
+              <div class="report-big-val" id="reportVocabAdded">0</div>
+              <span class="text-muted">New flashcards created</span>
+            </div>
+          </div>
+
+          <!-- ACTIVITY BREAKDOWN -->
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <h3>Activity Breakdown for Selected Week</h3>
+              <span class="badge" id="reportWeekBadge">Week 1</span>
+            </div>
+            <div class="activity-bars-container" id="activityBarsContainer">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- HOME PRACTICE CHECKLIST FOR THE SELECTED WEEK -->
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <h3>📝 Weekly Home Practice from Roadmap</h3>
+              <span class="badge badge-accent">PDF Exercise</span>
+            </div>
+            <div id="weeklyHomePracticeContainer" class="home-practice-box">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </section>
+
+        <!-- 11. SETTINGS -->
+        <section class="tab-pane" id="tab-settings">
+          <div class="page-title-row">
+            <div>
+              <h2>Einstellungen (Settings & Appearance)</h2>
+              <p class="subtitle">Customize your daily study goals, theme mode, accent colors, and app preferences.</p>
+            </div>
+            <button class="btn-primary btn-sm" id="saveSettingsBtn">Save Settings 💾</button>
+          </div>
+
+          <div class="settings-grid">
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <h3>⏱️ Study Goal Configuration</h3>
+              </div>
+              <div class="form-group">
+                <label for="settingDailyGoalMins">Daily Target Time (Minutes):</label>
+                <input type="number" id="settingDailyGoalMins" min="15" max="360" step="5" class="form-control" value="90">
+                <small class="text-muted">Default is 90 mins (Grammar 25m, Duolingo 20m, Anki 20m, Listening 15m, Review 10m).</small>
+              </div>
+              <div class="form-group">
+                <label for="settingLearnerName">Your Name:</label>
+                <input type="text" id="settingLearnerName" class="form-control" placeholder="Learner">
+              </div>
+            </div>
+
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <h3>🎨 Appearance & Themes</h3>
+              </div>
+              <div class="form-group">
+                <label>Theme Mode:</label>
+                <div class="theme-toggle-row">
+                  <button class="theme-choice-btn active" data-set-theme="dark">🌙 Dark Mode</button>
+                  <button class="theme-choice-btn" data-set-theme="light">☀️ Light Mode</button>
+                  <button class="theme-choice-btn" data-set-theme="oled">🖤 OLED Black</button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Accent Color:</label>
+                <div class="color-palette-row">
+                  <button class="color-dot dot-emerald active" data-color="emerald" title="Emerald Green"></button>
+                  <button class="color-dot dot-german-gold" data-color="gold" title="German Gold"></button>
+                  <button class="color-dot dot-blue" data-color="blue" title="Electric Blue"></button>
+                  <button class="color-dot dot-crimson" data-color="crimson" title="Crimson"></button>
+                  <button class="color-dot dot-purple" data-color="purple" title="Royal Violet"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 12. BACKUP & EXPORT -->
+        <section class="tab-pane" id="tab-backup">
+          <div class="page-title-row">
+            <div>
+              <h2>Datensicherung (Backup & Restore)</h2>
+              <p class="subtitle">Safeguard your study streak, completed days, vocabulary, and journal entries forever.</p>
+            </div>
+            <span class="badge badge-accent" id="lastBackupDisplay">Last Export: Never</span>
+          </div>
+
+          <div class="backup-grid">
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <h3>📤 Export Your Progress</h3>
+                <span class="badge">Safe JSON Format</span>
+              </div>
+              <p>Download a complete snapshot of all your DeutschPath progress (roadmap checks, daily study times, streaks, notes, vocabulary, and journal).</p>
+              <div class="action-row" style="margin-top: 1.5rem;">
+                <button class="btn-primary" id="exportDataBtn">Download Backup (.JSON)</button>
+              </div>
+            </div>
+
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <h3>📥 Import / Restore Backup</h3>
+                <span class="badge">Restore Data</span>
+              </div>
+              <p>Load an exported DeutschPath JSON backup file to restore your progress on any browser or computer.</p>
+              <div class="file-upload-row" style="margin-top: 1.5rem;">
+                <input type="file" id="importFileInput" accept=".json" class="form-control">
+                <button class="btn-secondary" id="importDataBtn">Restore From File</button>
+              </div>
+            </div>
+
+            <div class="dash-card full-width danger-card">
+              <div class="dash-card-header">
+                <h3>⚠️ Reset Data</h3>
+              </div>
+              <p class="text-muted">If you ever wish to restart your journey from Day 1, you can reset your local storage. (Make sure to export a backup first!)</p>
+              <button class="btn-danger btn-sm" id="resetDataBtn">Reset All Data</button>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- POPUP NOTIFICATION TOAST -->
+  <div class="toast" id="appToast">Notification message</div>
+
+  <!-- SCRIPTS -->
+  <script src="roadmap-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
