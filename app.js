@@ -143,16 +143,41 @@ function initNavigation() {
       if (targetTab === 'notes') renderNotesSidebar();
 
       // Close mobile sidebar if open
-      if (window.innerWidth <= 768 && sidebar) {
-        sidebar.classList.remove('open');
-      }
+      closeMobileSidebar();
     });
   });
 
-  if (mobileToggle && sidebar) {
+  const backdrop = document.getElementById('sidebarBackdrop');
+  const closeBtn = document.getElementById('sidebarCloseBtn');
+
+  function openMobileSidebar() {
+    if (sidebar) sidebar.classList.add('open');
+    if (backdrop) backdrop.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMobileSidebar() {
+    if (sidebar) sidebar.classList.remove('open');
+    if (backdrop) backdrop.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  if (mobileToggle) {
     mobileToggle.addEventListener('click', () => {
-      sidebar.classList.toggle('open');
+      if (sidebar && sidebar.classList.contains('open')) {
+        closeMobileSidebar();
+      } else {
+        openMobileSidebar();
+      }
     });
+  }
+
+  if (backdrop) {
+    backdrop.addEventListener('click', closeMobileSidebar);
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeMobileSidebar);
   }
 
   // Dashboard quick jump buttons
